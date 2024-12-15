@@ -5,8 +5,8 @@ from static_classes import Languages
 from static_classes import Ranks
 import logging
 
-from misc_functions import *
-from misc_functions import
+from misc_functions import read_json_from_file
+from misc_functions import write_json_to_file
 
 
 class UserData:
