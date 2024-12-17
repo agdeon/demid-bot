@@ -7,4 +7,4 @@ def _remove_active_status_str(text):
         return text
 
 
-print(_remove_active_status_char(' gdfsg'))
+print(_remove_active_status_str(' gdfsg'))

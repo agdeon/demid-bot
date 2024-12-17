@@ -17,10 +17,23 @@ class CommandHandler:
                  "/create - создать пресет\n"
                  "/remove - удалить текущий выбранный пресет\n"
                  "/help - подробная информация\n"
-                 "/stats - ваша статистика</b>\n")
+                 "/stats - ваша статистика</b>")
 
         reply_markup = ReplyKeyboards.get_user_presets_keyboard(message.chat.id)
         self.bot.send_message(message.chat.id, start_msg, parse_mode='HTML', reply_markup=reply_markup)
+
+    def history(self, message):
+        userdata = UserData(message.from_user.id)
+        cfg = userdata.config.load()
+        history_enabled = cfg["gpt_history_enabled"]
+        if history_enabled:
+            history_status_msg = '<b>🔴 История GPT <u>выключена</u>!</b>'
+            cfg["gpt_history_enabled"] = False
+        else:
+            history_status_msg = '<b>🟢 История GPT была <u>активирована</u>!</b>'
+            cfg["gpt_history_enabled"] = True
+        userdata.config.write(cfg)
+        self.bot.send_message(message.chat.id, history_status_msg, parse_mode='HTML')
 
     def create(self, message):
         enter_preset_name_msg = "<b>Введите имя для нового пресета GPT</b>"
@@ -58,7 +71,7 @@ class CommandHandler:
         userdata = UserData(message.chat.id)
         active_preset_name = userdata.config.load()["gpt_active_preset"]
         if not active_preset_name:
-            no_preset_msg = "<b><u>Вы не выбрали пресет для удаления! Выберите нужный пресет в меню, затем повторите команду</u></b>"
+            no_preset_msg = "<b>Вы не выбрали пресет для удаления! Выберите нужный пресет в меню, затем повторите команду</b>"
             self.bot.send_message(message.chat.id, no_preset_msg, parse_mode='HTML')
         else:
             presets_list = userdata.gpt_presets.load()
@@ -81,7 +94,8 @@ class CommandHandler:
                     "вы можете выбрать все доступные команды. Для выбора активного пресета используйте меню кнопок "
                     "которое находится справа от поля ввода.\n\n"
                     "Для того чтобы создать новый пресет, используйте команду /create\n"
-                    "Чтобы удалить пресет, для начала выберите его в меню, затем используйте /remove")
+                    "Чтобы удалить пресет, для начала выберите его в меню, затем используйте /remove\n"
+                    "Для активации истории используйте /history\n")
         self.bot.send_message(message.chat.id, help_msg, parse_mode='HTML')
 
     def stats(self, message):
@@ -111,6 +125,7 @@ class CommandHandler:
 
     def register_handlers(self):
         self.bot.message_handler(commands=['start'])(self.start)
+        self.bot.message_handler(commands=['history'])(self.history)
         self.bot.message_handler(commands=['create'])(self.create)
         self.bot.message_handler(commands=['remove'])(self.remove)
         self.bot.message_handler(commands=['help'])(self.help)
