@@ -56,7 +56,25 @@ class CommandHandler:
         self.bot.send_message(message.chat.id, success_msg, parse_mode='HTML', reply_markup=repl_markup)
 
     def remove(self, message):
-        pass
+        userdata = UserData(message.chat.id)
+        active_preset_name = userdata.config.load()["gpt_active_preset"]
+        if not active_preset_name:
+            no_preset_msg = "<b><u>Вы не выбрали пресет для удаления! Выберите нужный пресет в меню, затем повторите команду</u></b>"
+            self.bot.send_message(message.chat.id, no_preset_msg, parse_mode='HTML')
+        else:
+            presets_list = userdata.gpt_presets.load()
+            for i in range(len(presets_list)):
+                if presets_list[i]["name"] == active_preset_name:
+                    presets_list.pop(i)
+                    userdata.gpt_presets.write(presets_list)
+                    cfg = userdata.config.load()
+                    cfg["gpt_active_preset"] = None
+                    userdata.config.write(cfg)
+                    preset_deleted_msg = f"<b>Пресет <code>{active_preset_name}</code> был успешно удален</b>"
+                    repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
+                    self.bot.send_message(message.chat.id, preset_deleted_msg, parse_mode='HTML', reply_markup=repl_markup)
+
+
 
 
     def help(self, message):
