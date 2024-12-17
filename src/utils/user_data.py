@@ -121,7 +121,7 @@ class UserData:
             "today_requests": 0,
             "today_tokens_spent": 0,
             "today_cost": 0,
-            "last_request_date": "2020-01-31"
+            "last_request_date": None
         }
 
         def __init__(self, userdata_instance):

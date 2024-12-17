@@ -36,7 +36,7 @@ class TextHandler:
         for preset in user_presets:
             if preset["name"] == preset_name:
                 preset_found = preset
-        about_preset_msg = (f"<b>Выбрано:  <code>{preset_found["name"]}</code>\nИнструкция: \n"
+        about_preset_msg = (f"<b><u>Выбрано:</u>  <code>{preset_found["name"]}</code>\n<u>Инструкция:</u> \n"
                             f"<code>{preset_found["instruction"]}</code></b>")
         reply_markup = ReplyKeyboards.get_user_presets_keyboard(user_id)
         sent_message = self.bot.send_message(user_id, about_preset_msg, parse_mode='HTML', reply_markup=reply_markup)
