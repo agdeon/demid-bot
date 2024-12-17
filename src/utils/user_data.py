@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import Union
-import json
-from static_classes import Languages
-from static_classes import Ranks
+
+from src.utils.static_classes import Languages
+from src.utils.static_classes import Ranks
 import logging
 
-from misc_functions import read_json_from_file
-from misc_functions import write_json_to_file
-
+from src.utils.misc_functions import read_json_from_file
+from src.utils.misc_functions import write_json_to_file
+from src.utils.bot_data import BotData
 
 class UserData:
     USERS_DATA_SUB_PATH = Path('botdata') / 'users_data'
@@ -16,7 +16,7 @@ class UserData:
     FILE_LOG_LVL = logging.INFO
 
     def __init__(self, user_id):
-        self.id = user_id
+        self.id = str(user_id)
         current_path = Path(__file__).resolve()
         self.users_folder_path = Path(current_path.parents[2]) / self.USERS_DATA_SUB_PATH
         self.user_folder_path = Path(self.users_folder_path) / self.id
@@ -85,15 +85,15 @@ class UserData:
         DEFAULT_JSON = [
             {
                 "name": "Обычный GPT4",
-                "preset": ""
+                "instruction": ""
             },
             {
                 "name": "Лаконичный GPT4",
-                "preset": "Отвечай лаконично и по делу. Без воды и лишних слов."
+                "instruction": "Отвечай лаконично и по делу. Без воды и лишних слов."
             },
             {
                 "name": "Карточки слов",
-                "preset": "Твоя задача получать английское слово, затем вывести это слово, его транскрипцию, 3 наиболее популярных перевода этого слова. Затем несколько примеров его употребления с переводами. Если ты получаешь что-то другое кроме английского слова или фразы, отвечай так: ОТКАЗАНО: ВХОДНЫЕ ДАННЫЕ НЕКОРРЕКТНЫ."
+                "instruction": "Твоя задача получать английское слово, затем вывести это слово, его транскрипцию, 3 наиболее популярных перевода этого слова. Затем несколько примеров его употребления с переводами. Если ты получаешь что-то другое кроме английского слова или фразы, отвечай так: ОТКАЗАНО: ВХОДНЫЕ ДАННЫЕ НЕКОРРЕКТНЫ."
             },
         ]
 

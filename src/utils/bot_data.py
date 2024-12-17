@@ -1,5 +1,4 @@
 from pathlib import Path
-from misc_functions import *
 
 
 class BotData:
@@ -12,6 +11,7 @@ class BotData:
 
     # }
 
+    ACTIVE_STATUS_STR = '✅ '
     BOTDATA_SUB_PATH = Path('botdata')
 
     def __init__(self):

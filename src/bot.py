@@ -1,25 +1,25 @@
 import telebot
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-import os
+from telebot.storage import StateMemoryStorage
 
+import os
 from dotenv import load_dotenv
 
-from handlers.command_handler import CommandHandler
-from handlers.message_handler import MessageHandler
-from handlers.callback_query_handler import CallbackQueryHandler
+from src.handlers.command_handler import *
+from src.handlers.command_handler import CommandHandler
+from src.handlers.callback_query_handler import CallbackQueryHandler
+from src.handlers.text_handler import TextHandler
+
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-bot = telebot.TeleBot(BOT_TOKEN)
+storage = StateMemoryStorage()
+bot = telebot.TeleBot(BOT_TOKEN, state_storage=storage)
 
 command_handler = CommandHandler(bot)
-message_handler = MessageHandler(bot)
+text_handler = TextHandler(bot)
 callback_query_handler = CallbackQueryHandler(bot)
-
-command_handler.register_handlers()
-message_handler.register_handlers()
-callback_query_handler.register_handlers()
 
 # Запуск бота
 if __name__ == "__main__":
