@@ -1,9 +1,10 @@
+import os
+
 import telebot
+from dotenv import load_dotenv
 from telebot.handler_backends import State, StatesGroup
 from telebot.storage import StateMemoryStorage
 
-import os
-from dotenv import load_dotenv
 load_dotenv()
 
 storage = StateMemoryStorage()

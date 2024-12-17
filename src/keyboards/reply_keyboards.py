@@ -1,7 +1,8 @@
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton
-from telebot.types import ReplyKeyboardRemove
-from src.utils.user_data import UserData
+from telebot.types import (KeyboardButton, ReplyKeyboardMarkup,
+                           ReplyKeyboardRemove)
+
 from src.utils.bot_data import BotData
+from src.utils.user_data import UserData
 
 
 class ReplyKeyboards:

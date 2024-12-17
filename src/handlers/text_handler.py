@@ -1,13 +1,12 @@
-from src.utils.user_data import UserData
-from src.utils.bot_data import BotData
 from src.keyboards.reply_keyboards import ReplyKeyboards
+from src.utils.bot_data import BotData
+from src.utils.user_data import UserData
 
 
 class TextHandler:
 
     def __init__(self, bot):
         self.bot = bot
-        self._register_handlers()
 
     def _text_handler(self, message):
         # Если это текст из кнопок пресетов - обрабатываем нажатие на кнопку
@@ -50,7 +49,7 @@ class TextHandler:
         self._show_preset_info(preset_name, user_id)
 
 
-    def _register_handlers(self):
+    def register_handlers(self):
         self.bot.message_handler(func=lambda message: True)(self._text_handler)
 
     @classmethod

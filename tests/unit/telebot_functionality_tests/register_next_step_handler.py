@@ -1,7 +1,8 @@
-import telebot
-
 import os
+
+import telebot
 from dotenv import load_dotenv
+
 load_dotenv()
 
 

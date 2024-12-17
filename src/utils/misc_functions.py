@@ -1,6 +1,6 @@
 import json
-from typing import Union
 from pathlib import Path
+from typing import Union
 
 
 def read_json_from_file(path: Union[str, Path]) -> Union[dict, list]:

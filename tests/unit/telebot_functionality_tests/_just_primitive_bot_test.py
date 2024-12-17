@@ -1,8 +1,8 @@
-import telebot
-from telebot import types
 import os
 
+import telebot
 from dotenv import load_dotenv
+from telebot import types
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')

@@ -1,6 +1,6 @@
-from src.utils.user_data import UserData
 from src.keyboards.reply_keyboards import ReplyKeyboards
 from src.utils.bot_data import BotData
+from src.utils.user_data import UserData
 
 
 class CommandHandler:
@@ -8,7 +8,6 @@ class CommandHandler:
 
     def __init__(self, bot):
         self.bot = bot
-        self._register_handlers()
 
     def start(self, message):
         start_msg = ("<b>Этот бот позволяет создавать разные пресеты GPT, с кастомными, заранее заданными инструкциями. Список "
@@ -26,11 +25,11 @@ class CommandHandler:
     def create(self, message):
         enter_preset_name_msg = "<b>Введите имя для нового пресета GPT</b>"
         self.bot.send_message(message.chat.id, enter_preset_name_msg, parse_mode='HTML')
-        self.bot.register_next_step_handler(message, self.preset_name_input)
+        self.bot.register_next_step_handler(message, self._preset_name_input)
 
 
     # Sessions handlers
-    def preset_name_input(self, message):
+    def _preset_name_input(self, message):
         if self._is_command(message.text) or self._is_button(message.text, message.from_user.id):
             return
 
@@ -40,9 +39,9 @@ class CommandHandler:
 
         enter_instruction_msg = f"<b>Теперь напишите инструкцию для вашего пресета</b>"
         self.bot.send_message(message.chat.id, enter_instruction_msg, parse_mode='HTML')
-        self.bot.register_next_step_handler(message, self.preset_instruction_input, name)
+        self.bot.register_next_step_handler(message, self._preset_instruction_input, name)
 
-    def preset_instruction_input(self, message, name):
+    def _preset_instruction_input(self, message, name):
         if self._is_command(message.text) or self._is_button(message.text, message.from_user.id):
             return
 
@@ -110,7 +109,7 @@ class CommandHandler:
         return False
 
 
-    def _register_handlers(self):
+    def register_handlers(self):
         self.bot.message_handler(commands=['start'])(self.start)
         self.bot.message_handler(commands=['create'])(self.create)
         self.bot.message_handler(commands=['remove'])(self.remove)

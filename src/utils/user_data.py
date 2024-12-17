@@ -1,13 +1,11 @@
+import logging
 from pathlib import Path
 from typing import Union
 
-from src.utils.static_classes import Languages
-from src.utils.static_classes import Ranks
-import logging
-
-from src.utils.misc_functions import read_json_from_file
-from src.utils.misc_functions import write_json_to_file
 from src.utils.bot_data import BotData
+from src.utils.misc_functions import read_json_from_file, write_json_to_file
+from src.utils.static_classes import Languages, Ranks
+
 
 class UserData:
     USERS_DATA_SUB_PATH = Path('botdata') / 'users_data'
