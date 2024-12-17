@@ -1,6 +1,8 @@
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import ReplyKeyboardRemove
 from src.utils.user_data import UserData
 from src.utils.bot_data import BotData
+
 
 class ReplyKeyboards:
 
@@ -10,6 +12,8 @@ class ReplyKeyboards:
         userdata = UserData(user_id)
         active_preset_name = userdata.config.load()["gpt_active_preset"]
         preset_list = userdata.gpt_presets.load()
+        if len(preset_list) == 0:
+            return ReplyKeyboardRemove()
         for preset in preset_list:
             preset_name = preset["name"]
             if preset_name == active_preset_name:

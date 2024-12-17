@@ -24,7 +24,7 @@ class CommandHandler:
         self.bot.send_message(message.chat.id, start_msg, parse_mode='HTML', reply_markup=reply_markup)
 
     def create(self, message):
-        enter_preset_name_msg = "<b><u>Введите имя для нового пресета GPT</u></b>"
+        enter_preset_name_msg = "<b>Введите имя для нового пресета GPT</b>"
         self.bot.send_message(message.chat.id, enter_preset_name_msg, parse_mode='HTML')
         self.bot.register_next_step_handler(message, self.preset_name_input)
 
@@ -38,7 +38,7 @@ class CommandHandler:
         if len(name) > 25:
             name = name[0:25]
 
-        enter_instruction_msg = f"<b><u>Теперь напишите инструкцию для вашего пресета</u></b>"
+        enter_instruction_msg = f"<b>Теперь напишите инструкцию для вашего пресета</b>"
         self.bot.send_message(message.chat.id, enter_instruction_msg, parse_mode='HTML')
         self.bot.register_next_step_handler(message, self.preset_instruction_input, name)
 
@@ -50,7 +50,7 @@ class CommandHandler:
         gpt_presets = userdata.gpt_presets.load()
         gpt_presets.append({"name": name, "instruction": message.text})
         userdata.gpt_presets.write(gpt_presets)
-        success_msg = f"<b><u>Пресет <code>{name}</code> успешно создан и сохранен! Теперь он доступен в меню</u></b>"
+        success_msg = f"<b>Пресет <code>{name}</code> успешно создан и сохранен! Теперь он доступен в меню</b>"
         repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
         self.bot.delete_state(message.from_user.id, message.chat.id)
         self.bot.send_message(message.chat.id, success_msg, parse_mode='HTML', reply_markup=repl_markup)
@@ -70,15 +70,20 @@ class CommandHandler:
                     cfg = userdata.config.load()
                     cfg["gpt_active_preset"] = None
                     userdata.config.write(cfg)
-                    preset_deleted_msg = f"<b>Пресет <code>{active_preset_name}</code> был успешно удален</b>"
-                    repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
-                    self.bot.send_message(message.chat.id, preset_deleted_msg, parse_mode='HTML', reply_markup=repl_markup)
-
-
-
+            preset_deleted_msg = f"<b>Пресет <code>{active_preset_name}</code> был успешно удален</b>"
+            repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
+            self.bot.send_message(message.chat.id, preset_deleted_msg, parse_mode='HTML', reply_markup=repl_markup)
 
     def help(self, message):
-        self.bot.send_message(message.chat.id, "Это справка по использованию бота.")
+        help_msg = ("<b><u>Cправка по использованию бота</u></b>\n\n"
+                    "Этот бот позволяет создавать заранее настроенные GPT пресеты с кастомными инструкциями и "
+                    "переключаться между ними.\n\n"
+                    "В боте есть два меню, меню команд и меню пресетов. Меню команд находится слева от поля ввода, там "
+                    "вы можете выбрать все доступные команды. Для выбора активного пресета используйте меню кнопок "
+                    "которое находится справа от поля ввода.\n\n"
+                    "Для того чтобы создать новый пресет, используйте команду /create\n"
+                    "Чтобы удалить пресет, для начала выберите его в меню, затем используйте /remove")
+        self.bot.send_message(message.chat.id, help_msg, parse_mode='HTML')
 
     def stats(self, message):
         stats_dict = UserData(message.from_user.id).stats.load()
