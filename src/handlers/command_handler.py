@@ -40,13 +40,14 @@ class CommandHandler:
         self.bot.send_message(message.chat.id, enter_preset_name_msg, parse_mode='HTML')
         self.bot.register_next_step_handler(message, self._preset_name_input)
 
-
-    # Sessions handlers
     def _preset_name_input(self, message):
-        if self._is_command(message.text) or self._is_button(message.text, message.from_user.id):
+        name = message.text
+        if not self._validate_preset_name(user_id=message.from_user.id,preset_name=name):
+            invalid_data_msg = "<b>Некорректное имя пресета! Попробуйте еще раз.</b>"
+            self.bot.send_message(message.chat.id, invalid_data_msg, parse_mode='HTML')
+            self.bot.register_next_step_handler(message, self._preset_name_input)
             return
 
-        name = message.text
         if len(name) > 25:
             name = name[0:25]
 
@@ -56,6 +57,9 @@ class CommandHandler:
 
     def _preset_instruction_input(self, message, name):
         if self._is_command(message.text) or self._is_button(message.text, message.from_user.id):
+            invalid_data_msg = "<b>Некорректные данные! Попробуйте еще раз.</b>"
+            self.bot.send_message(message.chat.id, invalid_data_msg, parse_mode='HTML')
+            self.bot.register_next_step_handler(message, self._preset_instruction_input, name)
             return
 
         userdata = UserData(message.chat.id)
@@ -64,7 +68,6 @@ class CommandHandler:
         userdata.gpt_presets.write(gpt_presets)
         success_msg = f"<b>Пресет <code>{name}</code> успешно создан и сохранен! Теперь он доступен в меню</b>"
         repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
-        self.bot.delete_state(message.from_user.id, message.chat.id)
         self.bot.send_message(message.chat.id, success_msg, parse_mode='HTML', reply_markup=repl_markup)
 
     def remove(self, message):
@@ -82,6 +85,7 @@ class CommandHandler:
                     cfg = userdata.config.load()
                     cfg["gpt_active_preset"] = None
                     userdata.config.write(cfg)
+                    break
             preset_deleted_msg = f"<b>Пресет <code>{active_preset_name}</code> был успешно удален</b>"
             repl_markup = ReplyKeyboards.get_user_presets_keyboard(message.from_user.id)
             self.bot.send_message(message.chat.id, preset_deleted_msg, parse_mode='HTML', reply_markup=repl_markup)
@@ -116,11 +120,21 @@ class CommandHandler:
     def _is_button(text, user_id):
         if text[0:2] == BotData.ACTIVE_STATUS_STR:
             text = text[2:]
-        user_presets = UserData(user_id).gpt_presets.load()
-        for preset in user_presets:
-            if preset["name"] == text:
-                return True
+        preset_names = [preset["name"] for preset in UserData(user_id).gpt_presets.load()]
+        if text in preset_names:
+            return True
         return False
+
+    @staticmethod
+    def _validate_preset_name(*, user_id, preset_name):
+        if preset_name[0:2] == BotData.ACTIVE_STATUS_STR:
+            preset_name = preset_name[2:]
+        if preset_name[0] == '/':
+            return False
+        preset_names = [preset["name"] for preset in UserData(user_id).gpt_presets.load()]
+        if preset_name in preset_names:
+            return False
+        return True
 
 
     def register_handlers(self):

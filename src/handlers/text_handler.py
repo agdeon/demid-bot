@@ -48,17 +48,16 @@ class TextHandler:
         userdata.config.write(cfg)
         self._show_preset_info(preset_name, user_id)
 
-
     def register_handlers(self):
         self.bot.message_handler(func=lambda message: True)(self._text_handler)
 
     @classmethod
     def _check_if_preset_button(cls, preset_name, user_id):
         text = cls._remove_active_status_str(preset_name)
-        user_presets = UserData(user_id).gpt_presets.load()
-        for preset in user_presets:
-            if preset["name"] == text:
-                return True
+        preset_list = UserData(user_id).gpt_presets.load()
+        preset_names = [preset["name"] for preset in preset_list]
+        if preset_name in preset_names:
+            return True
         return False
 
     @staticmethod
