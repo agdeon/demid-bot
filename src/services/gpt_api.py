@@ -11,7 +11,7 @@ class GPTApiService:
         openai.api_key = os.getenv('GPT_TOKEN')
 
     @staticmethod
-    def request(string_or_messages: [list, str]):
+    def request(string_or_messages: list | str):
         """
         Sends request to GPT
         Messages format:
