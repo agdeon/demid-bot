@@ -61,7 +61,7 @@ class UserData:
 
     class GptHistory:
         FILENAME = 'gpt_history.json'
-        DEFAULT_JSON = [{"role": "system", "content": ""}]
+        DEFAULT_JSON = []
 
         def __init__(self, userdata_instance):
             self.userdata_instance = userdata_instance

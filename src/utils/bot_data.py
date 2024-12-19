@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from src.utils.misc_functions import read_json_from_file, write_json_to_file, create_empty_file_by_path
 
 class BotData:
 
@@ -12,6 +12,7 @@ class BotData:
     # }
 
     ACTIVE_STATUS_STR = '✅ '
+    ERROR_STATUS_STR = '⚠️ '
     BOTDATA_SUB_PATH = Path('botdata')
 
     def __init__(self):
@@ -33,8 +34,8 @@ class BotData:
         DEFAULT = {
             "basic": {
                 "daily_tokens_limit": 4000,
-                "history_tokens_limit": 0,
-                "history_messages_limit": 0
+                "history_tokens_limit": 500,
+                "history_messages_limit": 5
             },
             "plus": {
                 "daily_tokens_limit": 20000,
@@ -57,6 +58,9 @@ class BotData:
             self.path = Path(botdata_instance.folder_path) / self.FILENAME
             if not self.path.exists():
                 self._initialize()
+
+        def load(self) -> dict | list:
+            return read_json_from_file(self.path)
 
         def _initialize(self):
             write_json_to_file(self.path, self.DEFAULT)

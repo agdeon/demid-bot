@@ -1,0 +1,22 @@
+{
+    "basic": {
+        "daily_tokens_limit": 4000,
+        "history_tokens_limit": 0,
+        "history_messages_limit": 10
+    },
+    "plus": {
+        "daily_tokens_limit": 20000,
+        "history_tokens_limit": 500,
+        "history_messages_limit": 15
+    },
+    "vip": {
+        "daily_tokens_limit": 40000,
+        "history_tokens_limit": 1000,
+        "history_messages_limit": 20
+    },
+    "admin": {
+        "daily_tokens_limit": 40000,
+        "history_tokens_limit": 1000,
+        "history_messages_limit": 20
+    }
+}

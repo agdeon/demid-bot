@@ -1,14 +1,9 @@
 import openai
 from dotenv import load_dotenv
 import os
-from typing import Union
 
 
 class GPTApiService:
-
-    def __init__(self):
-        load_dotenv()
-        openai.api_key = os.getenv('GPT_TOKEN')
 
     @staticmethod
     def request(string_or_messages: list | str):
@@ -16,7 +11,7 @@ class GPTApiService:
         Sends request to GPT
         Messages format:
             For gpt history tracking {"role": "assistant", "content": "gpt response"}
-            For user requests {"role": "user", "content": "some user requeset"}
+            For user requests {"role": "user", "content": "some user requests"}
             For gpt instructions {"role": "system", "content": "Your instruction for gpt"}
 
         :param string_or_messages: Should be list [] of objects -> {"role": "user", "content": prompt}, or string
@@ -30,6 +25,8 @@ class GPTApiService:
             messages = string_or_messages
 
         try:
+            load_dotenv()
+            openai.api_key = os.getenv('GPT_TOKEN')
             response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=messages
