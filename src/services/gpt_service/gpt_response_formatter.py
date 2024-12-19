@@ -13,14 +13,13 @@ class GPTResponseHTMLFormatter:
         while True:
             tag_start, tag_end = cls._find_code_tag_indexes(text)
             if tag_start == -1:
-                result_list.append(text)
+                result_list.append(cls._correct_text(text))
                 break
 
             # Когда открыли ТЕКСТ и записываем его
             if text_flag:
                 text_flag = False
-                corrected_text = cls._replace_hashes(text[:tag_start])
-                corrected_text = cls._replace_asterisks(corrected_text)
+                corrected_text = cls._correct_text(text[:tag_start])
                 result_list.append(corrected_text)
                 text = text[tag_end:]
             # Когда открыли ТЕКСТ и записываем его
@@ -33,8 +32,14 @@ class GPTResponseHTMLFormatter:
         return "".join(result_list)
 
     @classmethod
+    def _correct_text(cls, text: str) -> str:
+        text = cls._replace_hashes(text)
+        text = cls._replace_asterisks(text)
+        return text
+
+    @classmethod
     def _replace_hashes(cls, text: str) -> str:
-        pattern = r"(#{1,5})\s*(.*?)(\n)"
+        pattern = r"(#{1,5})\s{1,2}(.*?)(\n)"
         formatted_text = re.sub(pattern, r"<b><u>\2</u></b>\3", text)
         return formatted_text
 
@@ -80,11 +85,11 @@ class GPTResponseHTMLFormatter:
 
 
 if __name__ == "__main__":
-    text = ("Here is some text!\n"
+    text = ("**Here is some text!**\n"
     "```python\n"
     "print(\"Hello, world!\")\n"
     "```\n"
-    "Lorem ipsum...\n"
+    "### Lorem ipsum...\n"
     "```javascript\n"
     "console.log(\"Hi\");\n"
     "```\n"
