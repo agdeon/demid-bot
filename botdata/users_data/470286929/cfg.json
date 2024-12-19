@@ -5,5 +5,5 @@
     "is_admin": false,
     "is_blocked": false,
     "gpt_history_enabled": true,
-    "gpt_active_preset": "Обычный GPT4"
+    "gpt_active_preset": "Продукты"
 }
