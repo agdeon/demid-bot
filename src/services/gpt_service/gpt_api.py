@@ -1,7 +1,7 @@
 import openai
 from dotenv import load_dotenv
 import os
-
+import time
 
 class GPTApiService:
 
@@ -24,14 +24,23 @@ class GPTApiService:
         else:
             messages = string_or_messages
 
-        try:
-            load_dotenv()
-            openai.api_key = os.getenv('GPT_TOKEN')
-            response = openai.ChatCompletion.create(
-                model="gpt-4o-mini",
-                messages=messages
-            )
-            return response['choices'][0]['message']['content'].strip()
+        try_cnt = 0
+        result = None
 
-        except Exception as e:
-            return f"❗ ERROR: {e}"
+        while try_cnt < 5:
+            try_cnt = try_cnt + 1
+
+            try:
+                load_dotenv()
+                openai.api_key = os.getenv('GPT_TOKEN')
+                response = openai.ChatCompletion.create(
+                    model="gpt-4o-mini",
+                    messages=messages
+                )
+                result = response['choices'][0]['message']['content'].strip()
+                break  # Получен результат, выходим с цикла
+            except Exception as e:
+                result = f"❗ ERROR: {e}"
+            time.sleep(0.3)
+
+        return result
