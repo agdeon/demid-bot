@@ -54,7 +54,7 @@ class UserData:
                 "rank": Ranks.BASIC,
                 "is_admin": False,
                 "is_blocked": False,
-                "gpt_history_enabled": False,
+                "gpt_history_enabled": True,
                 "gpt_active_preset": None
             }
             self.write(default_json)
@@ -82,16 +82,16 @@ class UserData:
         FILENAME = 'gpt_presets.json'
         DEFAULT_JSON = [
             {
-                "name": "Обычный GPT4",
-                "instruction": ""
+                "name": "Обычный GPT4o",
+                "instruction": "Обычный GPT4o"
             },
             {
                 "name": "Лаконичный GPT4",
-                "instruction": "Отвечай лаконично и по делу. Без воды и лишних слов."
+                "instruction": "Пиши очень короткие и содержательные ответы. Только по сути."
             },
             {
-                "name": "Карточки слов",
-                "instruction": "Твоя задача получать английское слово, затем вывести это слово, его транскрипцию, 3 наиболее популярных перевода этого слова. Затем несколько примеров его употребления с переводами. Если ты получаешь что-то другое кроме английского слова или фразы, отвечай так: ОТКАЗАНО: ВХОДНЫЕ ДАННЫЕ НЕКОРРЕКТНЫ."
+                "name": "Шутник",
+                "instruction": "Шути почти в каждом предложении."
             },
         ]
 
