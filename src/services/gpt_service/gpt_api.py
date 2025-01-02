@@ -6,7 +6,7 @@ import time
 class GPTApiService:
 
     @staticmethod
-    def request(string_or_messages: list | str):
+    def request(string_or_messages):
         """
         Sends request to GPT
         Messages format:

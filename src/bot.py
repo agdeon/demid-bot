@@ -1,11 +1,17 @@
 import os
+import time
+import sys
 
 import telebot
 from dotenv import load_dotenv
 
-from src.handlers.callback_query_handler import CallbackQueryHandler
-from src.handlers.command_handler import CommandHandler
-from src.handlers.text_handler import TextHandler
+src_abs_path = os.path.abspath("")  # Преобразуем относительный путь root папки в абсолютный
+print(src_abs_path)
+sys.path.append(src_abs_path)  # Добавляем для поиска модулей
+
+from handlers.callback_query_handler import CallbackQueryHandler
+from handlers.command_handler import CommandHandler
+from handlers.text_handler import TextHandler
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -20,5 +26,9 @@ text_handler.register_handlers()
 
 # Запуск бота
 if __name__ == "__main__":
-    print("DemidBot is running")
-    bot.infinity_polling()
+    try:
+        print("DemidBot is running")
+        bot.infinity_polling()
+    except Exception as e:
+        print(e)
+        time.sleep(20)

@@ -59,7 +59,7 @@ class BotData:
             if not self.path.exists():
                 self._initialize()
 
-        def load(self) -> dict | list:
+        def load(self):
             return read_json_from_file(self.path)
 
         def _initialize(self):
