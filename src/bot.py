@@ -6,7 +6,6 @@ import telebot
 from dotenv import load_dotenv
 
 src_abs_path = os.path.abspath("")  # Преобразуем относительный путь root папки в абсолютный
-print(src_abs_path)
 sys.path.append(src_abs_path)  # Добавляем для поиска модулей
 
 from handlers.callback_query_handler import CallbackQueryHandler
